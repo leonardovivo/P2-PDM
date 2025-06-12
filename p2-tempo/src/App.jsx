@@ -1,11 +1,14 @@
+import React, { useState } from 'react'
 import Busca from './components/Busca'
+import MostrarResultados from './components/MostrarResultados'
 
 const App = () => {
-  const expressaoJSX = <Busca/>
+  const [dados, setDados] = useState([])
 
   return (
     <div>
-      {expressaoJSX}
+      <Busca setDados={setDados} />
+      <MostrarResultados dados={dados} />
     </div>
   )
 }

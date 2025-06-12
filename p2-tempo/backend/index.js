@@ -12,7 +12,7 @@ app.get('/busca', async (req, res) => {
   const cidade = req.query.query
 
   try {
-    const resposta = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+    const resposta = await axios.get('https://api.openweathermap.org/data/2.5/forecast', {
       params: {
         q: cidade,
         appid: apiKey,
@@ -21,13 +21,14 @@ app.get('/busca', async (req, res) => {
       }
     })
 
-    const resultado = {
-      temperatura_minima: resposta.data.main.temp_min,
-      temperatura_maxima: resposta.data.main.temp_max,
-      umidade: resposta.data.main.humidity,
-      nome_icone: resposta.data.weather[0].icon,
-      descricao: resposta.data.weather[0].description
-    }
+    const resultado = resposta.data.list.map((item) => ({
+     temperatura_minima: item.main.temp_min,
+     temperatura_maxima: item.main.temp_max,
+     umidade: item.main.humidity,
+     nome_icone: item.weather[0].icon,
+     descricao: item.weather[0].description
+    }))
+
 
     console.log(`Cidade buscada: ${cidade}`)
     console.log(resultado)

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import striptags from 'striptags'
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import striptags from "striptags"
 
-const Busca = () => {
-  const [termoDeBusca, setTermoDeBusca] = useState('São Paulo')
+const Busca = ({ setDados }) => {
+  const [termoDeBusca, setTermoDeBusca] = useState("São Paulo")
 
   useEffect(() => {
-    if (termoDeBusca.length < 3) 
-      return
-    
+    if (termoDeBusca.length < 3) return
 
     const fazerBusca = async () => {
       try {
@@ -16,17 +14,15 @@ const Busca = () => {
           params: { query: termoDeBusca }
         })
 
-
-        const respostaLimpa = [{
-          temperatura_minima: striptags(resposta.data.temperatura_minima.toString()),
-          temperatura_maxima: striptags(resposta.data.temperatura_maxima.toString()),
-          umidade: striptags(resposta.data.umidade.toString()),
-          nome_icone: striptags(resposta.data.nome_icone),
-          descricao: striptags(resposta.data.descricao)
-        }]
+        const respostaLimpa = resposta.data.map((item) => ({
+          temperatura_minima: striptags(item.temperatura_minima.toString()),
+          temperatura_maxima: striptags(item.temperatura_maxima.toString()),
+          umidade: striptags(item.umidade.toString()),
+          nome_icone: striptags(item.nome_icone),
+          descricao: striptags(item.descricao)
+        }))
 
         setDados(respostaLimpa)
-
       } catch (error) {
         console.error('Erro:', error)
         setDados([])
@@ -38,7 +34,7 @@ const Busca = () => {
     }, 2000)
 
     return () => clearTimeout(timeoutID)
-  }, [termoDeBusca])
+  }, [termoDeBusca, setDados])
 
   return (
     <div className="flex flex-column align-items-center">

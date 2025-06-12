@@ -1,13 +1,15 @@
 require('dotenv').config()
 const axios = require('axios')
 const express = require('express')
+const cors = require('cors')
 const app = express()
+
+app.use(cors())
 
 const apiKey = process.env.API_KEY
 
 app.get('/busca', async (req, res) => {
   const cidade = req.query.query
-
 
   try {
     const resposta = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
